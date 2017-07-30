@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ServerSoket.iml" filepath="$PROJECT_DIR$/ServerSoket.iml" />
       <module fileurl="file://$PROJECT_DIR$/TCPSocketServer.iml" filepath="$PROJECT_DIR$/TCPSocketServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

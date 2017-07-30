@@ -15,9 +15,11 @@ import java.net.Socket;
 
 public class Server extends AsyncTask<Socket, Void, String> {
     private  CallBack mCallBack;
+    private String mMessage;
 
-    public Server(CallBack mCallBack) {
+    public Server(String mMessage, CallBack mCallBack) {
         this.mCallBack = mCallBack;
+        this.mMessage  = mMessage;
     }
 
     @Override
@@ -31,7 +33,7 @@ public class Server extends AsyncTask<Socket, Void, String> {
             //Get the output stream to the client
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             //write data to the data output stream
-            out.println("Hello from server");
+            out.println(mMessage);
             //Buffer the data input stream
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             //Read content of the data buffer

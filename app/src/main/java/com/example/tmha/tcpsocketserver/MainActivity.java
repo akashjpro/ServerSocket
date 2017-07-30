@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mEdtServerIp, mEdtPort, mEdtMessage;
     private TextView mTxtChat;
     private ServerSocket mServerSocket;
+    private  Socket mSocketClient;
     private String mStr, mMessage = "";
     private Handler mHandler = new Handler();
 
@@ -32,38 +33,64 @@ public class MainActivity extends AppCompatActivity {
         initView();
         getDeviceIpAddress();
 
-        mTxtChat.setText("Server host on: "+ mEdtServerIp.getText().toString());
-
-        Thread thread = new Thread(new serverThread());
-        thread.start();
-
-
-//        //New thread to listen
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
 //                try {
-//                    //Create a server socket object and bind it to port
-//                    mServerSocket = new ServerSocket(SERVER_PORT);
-//                    //Create server side client socket reference
-//                    Socket socketClient = null;
 //                    while (true){
-//                        //Accept the client connection and hand over communication to server side client socket
-//                        socketClient = mServerSocket.accept();
-//                        //For each client new instance of server asynctask will be created
-//                        Server server = new Server(new Server.CallBack() {
-//                            @Override
-//                            public void setMessage(String s) {
-//                                mEdtMessage.setText(s);
-//                            }
-//                        });
-//                        server.execute(socketClient);
+//                        String s = "111";
+//                        s = s + "gggg" ;
 //                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
+//                }catch (Exception e){
+//
 //                }
 //            }
 //        }).start();
+
+
+
+        mTxtChat.setText("Server host on: "+ mEdtServerIp.getText().toString());
+
+
+//
+//        Thread thread = new Thread(new serverThread());
+//        thread.start();
+
+
+        //New thread to listen
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //Create a server socket object and bind it to port
+                    mServerSocket = new ServerSocket(SERVER_PORT);
+                    //Create server side client socket reference
+                    mSocketClient = null;
+                    while (true){
+                        //Accept the client connection and hand over communication to server side client socket
+
+                        String s = "kfkfk";
+                        mSocketClient = mServerSocket.accept();
+                        //For each client new instance of server asynctask will be created
+                        Server server = new Server("Hello client",new Server.CallBack() {
+                            @Override
+                            public void setMessage(String s) {
+                                String chat = mTxtChat.getText().toString();
+                                chat = chat + "\nClient: "+ s;
+                                mTxtChat.setText(chat);
+
+                            }
+                        });
+                        server.execute(mSocketClient);
+                        String i = "kkkkkk";
+                    }
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void initView() {
@@ -99,6 +126,38 @@ public class MainActivity extends AppCompatActivity {
     public void send(View view) {
         Thread sendThread = new Thread(new sentMessage());
         sendThread.start();
+//
+//        mStr = mEdtMessage.getText().toString();
+//        String chat = mTxtChat.getText().toString();
+//        chat = chat + "\n Server : " + mStr;
+//        mTxtChat.setText(chat);
+//        mEdtMessage.setText("");
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+////                    //Create a server socket object and bind it to port
+////                    mServerSocket = new ServerSocket(SERVER_PORT);
+////                    //Create server side client socket reference
+////                    Socket socketClient = null;
+//
+//                    //Accept the client connection and hand over communication to server side client socke
+//                    //For each client new instance of server asynctask will be created
+//
+//                    Server server = new Server(mStr, new Server.CallBack() {
+//                        @Override
+//                        public void setMessage(String s) {
+//                            String chat = mTxtChat.getText().toString();
+//                            chat = chat + "\nClient: " + s;
+//                            mTxtChat.setText(chat);
+//                        }
+//                    });
+//                    server.execute(mSocketClient);
+//
+//
+//
+//            }
+//        }).start();
     }
 
     public class serverThread implements Runnable {
@@ -143,13 +202,15 @@ public class MainActivity extends AppCompatActivity {
                 DataOutputStream os = new
                         DataOutputStream(client.getOutputStream());
                 mStr = mEdtMessage.getText().toString();
-                mMessage = mMessage + "\n Server : " + mStr;
+                String chat = mTxtChat.getText().toString();
+                chat = chat + "\n Server : " + mStr;
+                final String finalChat = chat;
                 mHandler.post(new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                        mTxtChat.setText(mMessage);
+                        mTxtChat.setText(finalChat);
                     }
                 });
                 os.writeBytes(mStr);
